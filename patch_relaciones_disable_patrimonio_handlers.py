@@ -4,10 +4,7 @@ import re
 path = Path("eCoach_Relaciones.py")
 text = path.read_text(encoding="utf-8")
 
-# ---------------------------------------------------------------------
-# 1) Relationship project metadata
-# ---------------------------------------------------------------------
-
+# Relationship project metadata
 text = re.sub(
     r'ECOACH_PROJECT_ID = ".*?"',
     'ECOACH_PROJECT_ID = "saturday_demo_relationships_guided_agency"',
@@ -22,10 +19,7 @@ text = re.sub(
     count=1,
 )
 
-# ---------------------------------------------------------------------
-# 2) Rename visible board labels that can leak Patrimonio language
-# ---------------------------------------------------------------------
-
+# Visible board labels
 replacements = {
     'label="Cartera guiada"': 'label="Agencia relacional guiada"',
     'label="Cartera guiada con eCoach"': 'label="Agencia relacional guiada con eCoach"',
@@ -37,12 +31,7 @@ replacements = {
 for old, new in replacements.items():
     text = text.replace(old, new)
 
-# ---------------------------------------------------------------------
-# 3) Disable Patrimonio-specific handlers in main()
-# These should not be active in eCoach Relaciones Saturday demo.
-# ---------------------------------------------------------------------
-
-lines = text.splitlines()
+# Disable Patrimonio-specific handlers in main()
 disabled_patterns = [
     "handle_uploaded_document",
     "analyze_uploaded_documents_handler",
@@ -60,7 +49,7 @@ disabled_patterns = [
 ]
 
 new_lines = []
-for line in lines:
+for line in text.splitlines():
     stripped = line.strip()
     if stripped.startswith("app.add_handler(") and any(pattern in line for pattern in disabled_patterns):
         if "Disabled in eCoach Relaciones demo" not in line:

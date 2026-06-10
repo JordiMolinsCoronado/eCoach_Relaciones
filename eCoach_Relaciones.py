@@ -230,8 +230,8 @@ def app_state_file() -> Path:
 # It is intentionally file-based and backward-compatible with the old
 # ClientData/<telegram_id>/ layout.
 
-ECOACH_PROJECT_ID = "saturday_demo_funds_supported_sovereignty"
-ECOACH_PROJECT_TITLE = "Piloto sábado - fondos y soberanía acompañada"
+ECOACH_PROJECT_ID = "saturday_demo_relationships_guided_agency"
+ECOACH_PROJECT_TITLE = "Piloto sábado - agencia relacional guiada"
 
 def ecoach_projects_dir(client_dir: Path | None = None) -> Path:
     base = client_dir if client_dir is not None else active_client_dir()
@@ -393,7 +393,7 @@ def ecoach_select_provider(provider_key: str, provider_label: str, client_dir: P
 def ecoach_revise_to_guided(client_dir: Path | None = None, source: str = "free_text") -> None:
     board = load_ecoach_board(client_dir)
     ecoach_set_section(board, "que_quiero", "complete")
-    ecoach_set_section(board, "path_choice", "complete", selected="guided", label="Cartera guiada")
+    ecoach_set_section(board, "path_choice", "complete", selected="guided", label="Agencia relacional guiada")
     ecoach_set_section(board, "provider_choice", "waiting_user")
     ecoach_set_section(board, "mi_plan", "stale")
     ecoach_set_section(board, "onboarding", "stale")
@@ -449,13 +449,13 @@ def ecoach_start_initial_portfolio_discovery(client_dir: Path | None = None, sou
         "que_quiero",
         "complete",
         selected="understand_before_moving_money",
-        label="Entender cartera antes de mover dinero",
+        label="Entender la dinámica antes de actuar",
     )
     ecoach_set_section(
         board,
         "documents",
         "waiting_user",
-        label="Esperando extracto, PDFs, Excel, ISINs o listado de fondos",
+        label="Esperando relato, mensajes o hechos concretos",
     )
     ecoach_set_section(board, "diagnosis", "not_started")
     ecoach_set_section(board, "path_choice", "not_started")
@@ -512,7 +512,7 @@ def ecoach_mark_guided_ecoach_requested(client_dir: Path | None = None, source: 
         "provider_choice",
         "complete",
         selected="guided_with_ecoach",
-        label="Cartera guiada con eCoach",
+        label="Agencia relacional guiada con eCoach",
     )
     ecoach_set_section(
         board,
@@ -590,7 +590,7 @@ def ecoach_mark_bank_response_incomplete(client_dir: Path | None = None, source:
         "provider_choice",
         "complete",
         selected="guided_with_ecoach",
-        label="Cartera guiada con eCoach",
+        label="Agencia relacional guiada con eCoach",
     )
     ecoach_set_section(
         board,
@@ -1192,7 +1192,7 @@ async def try_handle_ecoach_control_message(update: Update, context: ContextType
                 board,
                 "documents",
                 "waiting_user",
-                label="Esperando documentos de cartera",
+                label="Esperando relato o hechos de la situación",
             )
             save_ecoach_board(board, active_client_dir())
             await reply_initial_discovery_with_llm(update, user_text)
@@ -8726,10 +8726,10 @@ def main() -> None:
     app.add_handler(MessageHandler(filters.Regex(r"^🎯 Resumen de qué quiero$"), show_que_quiero))
     app.add_handler(MessageHandler(filters.Regex(r"^🧭 Resumen de qué tengo que hacer$"), show_que_tengo_que_hacer))
     app.add_handler(CallbackQueryHandler(analyze_uploaded_documents_callback_handler, pattern=r"^analyze_uploaded_documents$"))
-    app.add_handler(MessageHandler(filters.Document.ALL, handle_uploaded_document))
-    app.add_handler(MessageHandler(filters.Regex(r"(?i)^\s*(analiza|analizar|lee|leer|revisa|revisar).*(documentos|pdf|excel|xlsx|cartera|fondos)[\s\.\!\?¡¿]*$"), analyze_uploaded_documents_handler))
-    app.add_handler(CallbackQueryHandler(handle_public_enrichment_button, pattern=f"^{PUBLIC_ENRICHMENT_CALLBACK}$"))
-    app.add_handler(CallbackQueryHandler(handle_private_bank_data_button, pattern=f"^{PRIVATE_BANK_DATA_CALLBACK}$"))
+    # Disabled in eCoach Relaciones demo: app.add_handler(MessageHandler(filters.Document.ALL, handle_uploaded_document))
+    # Disabled in eCoach Relaciones demo: app.add_handler(MessageHandler(filters.Regex(r"(?i)^\s*(analiza|analizar|lee|leer|revisa|revisar).*(documentos|pdf|excel|xlsx|cartera|fondos)[\s\.\!\?¡¿]*$"), analyze_uploaded_documents_handler))
+    # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_public_enrichment_button, pattern=f"^{PUBLIC_ENRICHMENT_CALLBACK}$"))
+    # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_private_bank_data_button, pattern=f"^{PRIVATE_BANK_DATA_CALLBACK}$"))
     app.add_handler(CallbackQueryHandler(handle_alternatives_button, pattern=f"^{ALTERNATIVES_CALLBACK}$"))
     app.add_handler(CallbackQueryHandler(handle_self_managed_path_button, pattern=f"^{SELF_MANAGED_PATH_CALLBACK}$"))
     app.add_handler(CallbackQueryHandler(handle_delegated_path_button, pattern=f"^{DELEGATED_PATH_CALLBACK}$"))
@@ -8741,10 +8741,10 @@ def main() -> None:
     app.add_handler(CallbackQueryHandler(handle_search_providers_button, pattern=f"^{SEARCH_PROVIDERS_CALLBACK}$"))
     app.add_handler(CallbackQueryHandler(handle_build_same_risk_lower_cost_portfolio_button, pattern="^build_same_risk_lower_cost_portfolio$"))
     app.add_handler(CallbackQueryHandler(handle_review_before_execute_button, pattern=f"^{REVIEW_BEFORE_EXECUTE_CALLBACK}$"))
-    app.add_handler(CallbackQueryHandler(handle_search_funds_button, pattern=f"^{SEARCH_FUNDS_CALLBACK}$"))
-    app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_MYINVESTOR_CALLBACK}$"))
-    app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_RENTA4_CALLBACK}$"))
-    app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_OPENBANK_CALLBACK}$"))
+    # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_search_funds_button, pattern=f"^{SEARCH_FUNDS_CALLBACK}$"))
+    # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_MYINVESTOR_CALLBACK}$"))
+    # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_RENTA4_CALLBACK}$"))
+    # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_OPENBANK_CALLBACK}$"))
     app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_INDEXA_CALLBACK}$"))
     app.add_handler(CallbackQueryHandler(handle_provider_selected_button, pattern=f"^{PROVIDER_INBESTME_CALLBACK}$"))
     app.add_handler(CallbackQueryHandler(handle_missing_data_checklist_button, pattern=f"^{MISSING_DATA_CHECKLIST_CALLBACK}$"))

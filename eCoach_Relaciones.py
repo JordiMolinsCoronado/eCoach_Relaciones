@@ -8510,6 +8510,7 @@ Invite her to consider Agencia relacional guiada.
 
 
 
+
 async def handle_guided_path_button(update, context):
     query = update.callback_query
     await query.answer()
@@ -8517,105 +8518,57 @@ async def handle_guided_path_button(update, context):
 
     facts = """The user has chosen: Agencia relacional guiada.
 
-Write ONE combined answer. Do not ask whether she wants Mi Plan. She chose guided agency, so give her the plan directly.
+Write a SHORT answer. Do not dump a full long Mi Plan document.
+The purpose is to establish the operating protocol, not to explain everything.
 
 Context:
 - Laura is seeing a man she likes.
 - When they are together, everything seems good.
 - Between dates there is ambiguity.
-- Sometimes he writes warmly.
-- Sometimes he disappears.
-- Sometimes he proposes vague plans.
-- Her psychologist has told her not to pursue and to observe coherence.
+- Her psychologist told her not to pursue and to observe coherence.
 - When Laura gets activated, she forgets the guidance.
 
 Core product idea:
-The value is not that eCoach invents a hypothetical scenario.
-The value is that Laura writes to eCoach when the real activation happens, before replying to him.
-Then eCoach applies Mi Plan in real time.
+The psychologist provides the therapeutic method.
+eCoach helps Laura apply that method between sessions, at the moment anxiety appears.
+Then eCoach helps Laura return to the psychologist with concrete data about what happened.
 
-Core idea:
-- No persecución ansiosa.
-- No juicio delegado.
-- Agencia relacional guiada.
-
-Boundary:
+Boundaries:
 - eCoach does not replace the psychologist.
-- The psychologist keeps therapeutic authority.
-- Laura keeps the decision.
-- eCoach helps between sessions, especially when the pattern activates.
+- eCoach does not decide for Laura.
+- eCoach does not tell Laura what the man thinks.
+- eCoach helps her pause and choose from values.
 
-The answer should include:
+The answer must be compact and include:
 
-1. Very short explanation of agencia relacional guiada:
-- Laura decides.
-- eCoach helps her not lose herself when activated.
-- eCoach helps her practice between sessions.
+1. "Has elegido agencia relacional guiada."
+2. Laura decides; psychologist remains therapeutic reference.
+3. eCoach helps between sessions when activation appears.
+4. A very short Mi Plan as protocol:
+   - pause before replying;
+   - separate facts from stories;
+   - remember values: clarity, warmth, reciprocity;
+   - choose a reply that does not pursue, punish, or self-abandon;
+   - observe what happens and bring concrete data to the psychologist.
+5. Tell Laura to write here before answering when the real activation happens.
+6. Give this simple example:
+   "Me acaba de escribir. Me estoy activando y quiero contestar ya."
+7. Say that then eCoach will apply the plan in real time:
+   pause, facts vs stories, values, possible replies, observation of coherence, therapy material.
 
-2. Mi Plan:
-- Current relational question:
-  ¿Esta conexión se está volviendo mutua y clara, o vivo de esperanza intermitente?
-
-- Facts vs stories:
-  Facts:
-  - When they are together, connection feels good.
-  - Sometimes he writes warmly.
-  - Sometimes he disappears.
-  - Sometimes he proposes vague plans.
-  - He says he wants to see her but does not always concretize.
-
-  Stories:
-  - I did something wrong.
-  - I am too intense.
-  - If I ask for clarity, I will lose him.
-  - I must adapt to his rhythm.
-  - I should become colder.
-  - I should block him.
-
-- Values:
-  clarity, warmth, reciprocity, not pursuing, not punishing, not self-abandoning, expressing a need calmly, observing facts not fantasies.
-
-- Boundary experiment:
-  Me gusta verte y lo paso bien contigo.
-  A la vez, los planes muy vagos no me van bien.
-  Si te apetece vernos, prefiero concretar día y hora.
-
-- Observe response:
-  Does he become clearer?
-  Does he respect the boundary?
-  Does he move toward her with facts?
-  Does he punish clarity?
-  Does the relationship make her more herself or less herself?
-
-- Therapy preparation:
-  what happened, what she felt, what she thought, what she did, where she abandoned herself, where she held herself, what to bring to therapy.
-
-3. End with a real-time instruction:
-Tell Laura:
-When the real activation happens, write here before replying.
-She can write something imperfect like:
-"Me acaba de escribir esto: 'Quizá nos vemos mañana, te digo algo 😘'. Me estoy activando y quiero contestar ya."
-
-Then eCoach will apply Mi Plan in real time:
-pause, facts vs stories, values, possible reply, observe consistency, therapy material.
-
-Do NOT offer to create a follow-up yet.
-Do NOT show a follow-up button yet.
-The follow-up comes only after a real activation has been processed.
-
-Tone:
-- Clear.
-- Warm.
-- Compact.
-- Not too therapeutic.
-- No "Con calidez".
-- No repeated intro.
+Important:
+- Maximum about 180-230 words.
+- No long numbered plan with six sections.
+- No full boundary message yet.
+- No detailed facts/stories list yet.
+- Those details come later, when Laura writes during real activation.
+- No follow-up button yet.
 """
 
     await answer_callback_with_skill(
         query=query,
         skill_name="manage_relationship_pattern",
-        task="Write the combined Agencia relacional guiada + Mi Plan answer and invite real-time activation use.",
+        task="Write a short guided-agency protocol after the user chooses Agencia relacional guiada.",
         facts=facts,
         reply_markup=None,
     )

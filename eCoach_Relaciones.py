@@ -5804,6 +5804,7 @@ def alternatives_path_keyboard() -> InlineKeyboardMarkup:
         ]
     )
 
+
 def build_alternatives_path_message() -> str:
     return (
         "Podemos explorar alternativas, pero primero conviene elegir el tipo de camino.\n\n"

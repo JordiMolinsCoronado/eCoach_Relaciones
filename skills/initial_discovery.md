@@ -113,3 +113,27 @@ The initial answer should be short:
 Avoid long lists.
 Avoid fictional alternatives.
 Avoid asking her to choose between paths.
+
+## One-button UI rule for eCoach Relaciones
+
+The client-facing answer must NOT include any fake button label in the text.
+
+Never write:
+- [Agencia Relacional Guiada]
+- [Agencia relacional guiada]
+- "button:"
+- "pulsa el botón..."
+
+The Telegram UI will show the real inline button.
+
+The answer should end naturally with a short question, for example:
+"¿Quieres activarla?"
+
+Only the actual Telegram inline keyboard should contain:
+Agencia Relacional Guiada
+
+Also:
+- Do not mention Gestionarlo sola.
+- Do not mention Delegar el juicio.
+- Do not describe three paths.
+- There is only one proposed support mode: Agencia Relacional Guiada.

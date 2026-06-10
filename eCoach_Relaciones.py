@@ -1322,6 +1322,43 @@ SESSION_CONSOLIDATION_CONFIRM_KEYBOARD = ReplyKeyboardMarkup(
 
 PENDING_SESSION_CONSOLIDATION: dict[str, dict] = {}
 
+
+async def answer_message_with_skill(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    skill_name: str,
+    task: str,
+    facts: str,
+    reply_markup=None,
+) -> None:
+    thinking_message = await update.message.reply_text("Pensando...")
+
+    try:
+        answer = await asyncio.to_thread(
+            generate_skill_client_reply,
+            skill_name,
+            task,
+            facts,
+        )
+    except Exception as error:
+        try:
+            await thinking_message.delete()
+        except Exception:
+            pass
+
+        await update.message.reply_text(
+            f"No he podido aplicar el plan en tiempo real: {error}",
+            reply_markup=MAIN_KEYBOARD,
+        )
+        return
+
+    try:
+        await thinking_message.delete()
+    except Exception:
+        pass
+
+    await update.message.reply_text(answer, reply_markup=reply_markup)
+
 # ---------------------------------------------------------------------
 # Initial client files
 # ---------------------------------------------------------------------

@@ -4657,25 +4657,46 @@ Comandos útiles:
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    activate_client_from_update(update)
-    ensure_client_files()
+    welcome = """Hola. Soy eCoach Relaciones.
 
-    remember_chat_id(update)
+Puedo ayudarte a practicar agencia relacional entre sesiones de terapia.
 
-    template = load_required_app_text("start_message.md")
+No sustituyo a tu psicologa.
+No decido por ti.
+Te ayudo a pausar, separar hechos de historias, recordar tus valores y elegir el siguiente paso con mas claridad.
 
-    message = render_template(
-        template,
-        {
-            "active_client_name": current_client_name(),
-        },
-    )
+Idea central:
 
-    await update.message.reply_text(
-        message,
-        reply_markup=MAIN_KEYBOARD,
-    )
+No persecucion ansiosa.
+No juicio delegado.
+Agencia relacional guiada.
 
+Botones principales:
+
+Quien soy
+Ver el resumen de tu situacion y patron relacional.
+
+Que quiero
+Ver tus valores, criterios y objetivo relacional actual.
+
+Plan de accion
+Ver tu Mi Plan y el siguiente paso claro.
+
+Seguimientos
+Ver recordatorios y check-ins pendientes.
+
+Guardar sesion
+Revisar lo hablado y decidir que guardar.
+
+Para probar la demo, puedes escribir:
+
+Estoy saliendo con un hombre que me gusta.
+Cuando estamos juntos, todo parece bien.
+Pero entre citas es muy ambiguo.
+A veces escribe con carino, pero otras desaparece.
+Mi psicologa me dice que no persiga y que observe si hay coherencia, pero cuando me activo se me olvida todo.
+"""
+    await update.message.reply_text(welcome, reply_markup=MAIN_KEYBOARD)
 
 async def show_quien_soy(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     activate_client_from_update(update)
@@ -8716,11 +8737,11 @@ def main() -> None:
     app.add_handler(MessageHandler(filters.Regex(r"^Cancelar$"), cancel))
     app.add_handler(MessageHandler(filters.Regex(r"^✅ Confirmar cambio memoria$"), confirm_memory_change))
     app.add_handler(MessageHandler(filters.Regex(r"^❌ Cancelar cambio memoria$"), cancel_memory_change))
-    app.add_handler(MessageHandler(filters.Regex(r"^👤 Quién soy$"), show_quien_soy))
-    app.add_handler(MessageHandler(filters.Regex(r"^🎯 Qué quiero$"), show_que_quiero))
-    app.add_handler(MessageHandler(filters.Regex(r"^✅ Plan de acción$"), show_que_tengo_que_hacer))
-    app.add_handler(MessageHandler(filters.Regex(r"^⏰ Seguimientos$"), show_followups))
-    app.add_handler(MessageHandler(filters.Regex(r"^💾 Guardar sesión$"), show_session_buffer_status))
+    app.add_handler(MessageHandler(filters.Regex(r"^Quien soy$"), show_quien_soy))
+    app.add_handler(MessageHandler(filters.Regex(r"^Que quiero$"), show_que_quiero))
+    app.add_handler(MessageHandler(filters.Regex(r"^Plan de accion$"), show_que_tengo_que_hacer))
+    app.add_handler(MessageHandler(filters.Regex(r"^Seguimientos$"), show_followups))
+    app.add_handler(MessageHandler(filters.Regex(r"^Guardar sesion$"), show_session_buffer_status))
     app.add_handler(MessageHandler(filters.Regex(r"^✅ Confirmar guardado sesión$"), confirm_session_consolidation))
     app.add_handler(MessageHandler(filters.Regex(r"^❌ Cancelar guardado sesión$"), cancel_session_consolidation))
     app.add_handler(MessageHandler(filters.Regex(r"^🎯 Resumen de qué quiero$"), show_que_quiero))

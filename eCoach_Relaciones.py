@@ -5797,22 +5797,10 @@ def alternatives_path_keyboard() -> InlineKeyboardMarkup:
         [
             [
                 InlineKeyboardButton(
-                    "\U0001f9ed Cartera autogestionada",
-                    callback_data=SELF_MANAGED_PATH_CALLBACK,
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    "\U0001f6e1\ufe0f Gesti\u00f3n delegada",
-                    callback_data=DELEGATED_PATH_CALLBACK,
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    "\U0001f9e9 Cartera guiada",
+                    "Agencia Relacional Guiada",
                     callback_data=GUIDED_PATH_CALLBACK,
                 )
-            ],
+            ]
         ]
     )
 

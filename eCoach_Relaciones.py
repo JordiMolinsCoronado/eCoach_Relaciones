@@ -8394,22 +8394,10 @@ def alternatives_path_keyboard() -> InlineKeyboardMarkup:
         [
             [
                 InlineKeyboardButton(
-                    "Gestionarlo sola",
-                    callback_data=SELF_MANAGED_PATH_CALLBACK,
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    "Delegar el juicio",
-                    callback_data=DELEGATED_PATH_CALLBACK,
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    "Agencia relacional guiada",
+                    "Agencia Relacional Guiada",
                     callback_data=GUIDED_PATH_CALLBACK,
                 )
-            ],
+            ]
         ]
     )
 

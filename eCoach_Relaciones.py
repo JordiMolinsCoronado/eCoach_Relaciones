@@ -8472,6 +8472,7 @@ Invite her to consider Agencia relacional guiada.
 
 
 
+
 async def handle_guided_path_button(update, context):
     query = update.callback_query
     await query.answer()
@@ -8561,6 +8562,10 @@ She can write something imperfect like:
 Then eCoach will apply Mi Plan in real time:
 pause, facts vs stories, values, possible reply, observe consistency, therapy material.
 
+Do NOT offer to create a follow-up yet.
+Do NOT show a follow-up button yet.
+The follow-up comes only after a real activation has been processed.
+
 Tone:
 - Clear.
 - Warm.
@@ -8575,9 +8580,8 @@ Tone:
         skill_name="manage_relationship_pattern",
         task="Write the combined Agencia relacional guiada + Mi Plan answer and invite real-time activation use.",
         facts=facts,
-        reply_markup=create_mi_plan_followup_keyboard(),
+        reply_markup=None,
     )
-
 
 async def handle_design_mi_plan_button(update, context):
     query = update.callback_query
@@ -8659,6 +8663,112 @@ Mañana volvemos al siguiente paso claro."""
     await query.message.reply_text(
         confirmation,
         reply_markup=MAIN_KEYBOARD,
+    )
+
+async def handle_real_time_relationship_activation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    activate_client_from_update(update)
+    ensure_client_files()
+
+    user_text = update.message.text or ""
+
+    facts = f"""The user is writing during a REAL relational activation.
+
+This is not a hypothetical case created by eCoach.
+The user has come to eCoach before replying, exactly as Mi Plan instructed.
+
+User message:
+{user_text}
+
+Context from Mi Plan:
+- Laura likes this man.
+- When they are together, things feel good.
+- Between dates, ambiguity activates her.
+- Her psychologist told her not to pursue and to observe coherence.
+- eCoach must help between therapy sessions without replacing the psychologist.
+
+Task:
+Apply Mi Plan in real time.
+
+The answer should include:
+
+1. Pause:
+- This is activation, not failure.
+- Do not answer in the first wave.
+- Take 30 seconds.
+- The goal is not to suppress emotion, but to avoid letting activation write the message.
+
+2. Facts vs stories:
+Use the user's actual message.
+Facts may include:
+- he wrote late;
+- he used warm language or emoji;
+- he used vague wording;
+- he did not concretize day/time;
+- Laura feels urgency to answer.
+
+Stories may include:
+- I am not important;
+- I am too intense;
+- I must accept vagueness;
+- I must become cold;
+- I will lose him if I ask clearly.
+
+3. Values:
+- clarity;
+- warmth;
+- reciprocity;
+- not pursuing;
+- not punishing;
+- not self-abandoning.
+
+4. Possible replies:
+Give 3 options:
+A. warm and clear;
+B. short and calm;
+C. more direct.
+
+Recommended version should be warm-clear, close to:
+"Me apetece verte. Para mí mañana funciona mejor si lo concretamos con algo de margen. Si te va bien, dime día/hora y lo organizamos."
+
+Do not make it manipulative.
+Do not make it cold.
+Do not make it needy.
+Do not decide for Laura.
+Say she can choose the version that feels most aligned.
+
+5. Observe consistency:
+After sending a clear warm message, the task is not obsessive monitoring.
+The task is to observe whether he brings more clarity or keeps ambiguity.
+
+6. Material for psychologist:
+Suggest saving:
+- trigger;
+- body reaction;
+- facts;
+- story;
+- action chosen;
+- how she felt after choosing from values.
+
+7. End by offering the follow-up:
+Say we can create tomorrow's 10:00 follow-up to review what happened.
+
+Tone:
+- Practical.
+- Warm.
+- Product-like.
+- Not patrimonial.
+- Not financial.
+- Not generic.
+- No sentence saying "soy guía patrimonial-financiero".
+"""
+
+    await answer_message_with_skill(
+        update=update,
+        context=context,
+        skill_name="manage_relationship_pattern",
+        task="Apply Mi Plan in real time to this relationship activation.",
+        facts=facts,
+        reply_markup=create_mi_plan_followup_keyboard(),
     )
 
 def main() -> None:
@@ -8753,6 +8863,11 @@ def main() -> None:
     # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_keep_similar_risk_button, pattern=f"^{KEEP_SIMILAR_RISK_CALLBACK}$"))
     # Disabled in eCoach Relaciones demo: app.add_handler(CallbackQueryHandler(handle_reduce_risk_button, pattern=f"^{REDUCE_RISK_CALLBACK}$"))
     # Disabled in eCoach Relaciones demo: app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & filters.Regex(PUBLIC_ENRICHMENT_RE), handle_public_enrichment_command), group=0)
+
+    app.add_handler(MessageHandler(
+        filters.Regex(r"(?i)(me acaba de escribir|me estoy activando|estoy activada|quiero contestar ya|contestarle ya|hacerme la fría|hacerme la fria|son las 23:40|quizá nos vemos|quiza nos vemos)") & ~filters.COMMAND,
+        client_locked_handler(handle_real_time_relationship_activation),
+    ))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_free_text))
 
     app.add_handler(CallbackQueryHandler(handle_design_mi_plan_button, pattern=f"^{DESIGN_MI_PLAN_CALLBACK}$"))

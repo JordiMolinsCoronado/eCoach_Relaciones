@@ -9,7 +9,7 @@ import csv
 import shutil
 
 from contextvars import ContextVar
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
 
@@ -8607,78 +8607,62 @@ End by making the follow-up feel like the next clear step.
     )
 
 
+
 async def handle_create_mi_plan_followup_button(update, context):
     query = update.callback_query
     await query.answer()
     await clear_clicked_inline_keyboard(query)
 
-    facts = """Follow-up created.
+    activate_client_from_update(update)
+    ensure_client_files()
+    ensure_followup_triggers_file()
 
-Date:
-- mañana
+    tomorrow = today_app() + timedelta(days=1)
+    followup_date = tomorrow.strftime("%Y-%m-%d")
+    followup_time = "10:00"
 
-Time:
-- 10:00
+    trigger = {
+        "date": followup_date,
+        "time": followup_time,
+        "message_template": (
+            "Seguimiento de agencia relacional guiada: revisar si apareció activación, "
+            "separar hechos de historias, recordar valores relacionales y elegir el siguiente paso claro. "
+            "Si hay algo importante, preparar material para la psicóloga."
+        ),
+        "reason": "Mi Plan de eCoach Relaciones — Laura",
+        "source": "relaciones_mi_plan_button",
+        "status": "pending",
+    }
 
-Topic:
-- revisar activación, hechos vs historias, valores relacionales y siguiente paso claro.
+    saved_followups = save_immediate_followup_triggers(
+        [trigger],
+        source="relaciones_mi_plan_button",
+    )
 
-In the follow-up, eCoach will review:
-- whether Laura became activated;
-- whether she paused before acting;
-- whether she separated facts from stories;
-- whether she acted from values;
-- whether she needs to prepare something for her psychologist.
-
-Tone:
-- warm;
-- non-punitive;
-- high goodwill;
-- no shame.
-
-Example tone:
-Eso fue activación, no fracaso.
-Vamos a mirarlo con calma:
-¿qué quería hacer el miedo, y qué elegiría tu yo más sereno ahora?
-
-Finality:
-Confirm the follow-up has been created and explain what will happen.
-"""
-
-    thinking_message = await query.message.reply_text("Pensando...")
-
-    try:
-        followup_text = await asyncio.to_thread(
-            generate_skill_client_reply,
-            "manage_relationship_pattern",
-            "Write the relationship follow-up creation confirmation.",
-            facts,
+    if not saved_followups:
+        await query.message.reply_text(
+            "No he podido crear el seguimiento. Inténtalo de nuevo o revisa /scheduler_status.",
+            reply_markup=MAIN_KEYBOARD,
         )
-    except Exception as error:
-        try:
-            await thinking_message.delete()
-        except Exception:
-            pass
-
-        await query.message.reply_text(f"No he podido crear el seguimiento: {error}")
         return
 
-    try:
-        await thinking_message.delete()
-    except Exception:
-        pass
+    confirmation = """Listo, Laura. He creado el seguimiento para mañana a las 10:00.
 
-    try:
-        client_dir = active_client_dir()
-        followups_dir = client_dir / "followups"
-        followups_dir.mkdir(parents=True, exist_ok=True)
-        followup_file = followups_dir / "relaciones_laura_followup_manana_10-00.md"
-        followup_file.write_text(followup_text, encoding="utf-8")
-    except Exception:
-        pass
+Revisaremos:
+- si apareció activación;
+- si pudiste pausar antes de actuar;
+- qué hechos había y qué historias construyó el miedo;
+- qué valor relacional quieres cuidar ahora;
+- y si conviene preparar algo para tu psicóloga.
 
-    await query.message.reply_text(followup_text)
+No será para juzgarte. Si apareció ansiedad, no es un fracaso: es el momento exacto para practicar.
 
+Mañana volvemos al siguiente paso claro."""
+
+    await query.message.reply_text(
+        confirmation,
+        reply_markup=MAIN_KEYBOARD,
+    )
 
 def main() -> None:
     app = (
